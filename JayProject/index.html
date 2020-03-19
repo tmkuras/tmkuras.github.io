@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1894.3">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; line-height: 14.0px; font: 12.0px Courier; color: #000000; -webkit-text-stroke: #000000}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; line-height: 14.0px; font: 12.0px Courier; color: #000000; -webkit-text-stroke: #000000; min-height: 14.0px}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">Vue.component('state', {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>template: `</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="box state" :class="{active: enabled}" @click="$emit('set_active_state', name)"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;p class="label"&gt;{{name}}&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;p class="clock"&gt;{{clock}}&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div class="circle"&gt;&lt;p&gt;{{history.length}}&lt;/p&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>`,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>props: ['name', 'active_state', 'history'],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>data: function() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>return {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>time: 0,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>timer: null,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>timer_start: null,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>watch: {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>enabled: function(new_val, old_val) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>this.toggle()</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>computed: {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>clock: function() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>return format_clock(this.time)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>enabled: function() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>return this.name == this.active_state</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>methods: {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>toggle: function () {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (this.enabled) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>this.timer_start = new Date()</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>this.time = 0</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>this.timer = setInterval(this.increment, 1000)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>} else {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>timer_diff = (new Date() - this.timer_start) / 1000</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>this.history.push([this.timer_start.toLocaleTimeString(), timer_diff])</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>clearInterval(this.timer)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>increment: function() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>this.time += 1</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>},</span></p>
+<p class="p1"><span class="s1">})</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">Vue.component('event', {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>template: `</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="box event" @click="log"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;p class="label"&gt;{{name}}&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;p&gt;{{last_time}}&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div class="circle"&gt;&lt;p&gt;{{history.length}}&lt;/p&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>`,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>props: ['name', 'history'],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>computed: {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>last_time: function() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (this.history.length &gt; 0) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>return this.history[this.history.length - 1]</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>} else {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>return null</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>methods: {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>log: function() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>this.history.push(new Date().toLocaleTimeString())</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>},</span></p>
+<p class="p1"><span class="s1">})</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">Vue.component('toggle', {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>template: `</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="box" :class="{active: enabled}" @click="toggle"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;p class="label"&gt;{{name}}&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;p&gt;{{clock}}&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div class="circle"&gt;&lt;p class="count"&gt;{{history.length}}&lt;/p&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>`,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>props: ['name', 'history'],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>data: function() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>return {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>time: 0,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>timer: null,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>timer_start: null,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>computed: {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>enabled: function() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>return this.timer_start !== null</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>clock: function() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>return format_clock(this.time)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>methods: {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>toggle: function() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (this.enabled) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>timer_diff = (new Date() - this.timer_start) / 1000</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>this.history.push([this.timer_start.toLocaleTimeString(), timer_diff])</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>clearInterval(this.timer)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>this.timer_start = null</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>} else {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>this.timer_start = new Date()</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>this.time = 0</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>this.timer = setInterval(this.increment, 1000)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>increment: function() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>this.time += 1</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>},</span></p>
+<p class="p1"><span class="s1">})</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">function format_clock(time) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>clock = [0, 0, 0]</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>i = 0</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>while (time &gt; 0) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>clock[i] = time % 60</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>time = Math.floor(time / 60)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>i += 1</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>return clock.reverse().map(num_pad).join(':')</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">function num_pad(num) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>if (num &lt; 10) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>return '0' + num</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>} else {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>return num</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">function get_entries_with_start(obj) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>return Object.entries(obj)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.map(([k, v]) =&gt; _.zip([k + ' Start', k], _.unzip(v)))</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.flat(1)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.map(([k, v]) =&gt; [k, v || []])</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">vm = new Vue({</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>el: '#app',</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>data: {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>states: {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>Settling: [],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>20DB: [],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>40DB: [],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>60DB: [],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>80DB: [],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>Unknown: [],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>events: {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>NoChange: [],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>Pause: [],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>HeadTurn: [],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>Flush: [],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>toggles: {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>'Out of sight': [],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>active_state: null,</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>methods: {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>set_active_state: function(name) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (this.active_state == name) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>this.active_state = null</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>} else {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>this.active_state = name</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>download: function() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>columns = Object.fromEntries([</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>get_entries_with_start(this.states),</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>Object.entries(this.events),</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>get_entries_with_start(this.toggles),</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>].flat(1))</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>header = Object.keys(columns)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>values = Object.values(columns)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>max_len = Math.max(...values.map(v =&gt; v.length))</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>rows = [...Array(max_len).keys()].map(i =&gt; values.map(row =&gt; row[i]))</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>csv = [header].concat(rows).map(v =&gt; v.join(',')).join('\n')</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const f = new File([csv], {type: 'text/csv'})</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const link = document.createElement('a')</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>link.href = URL.createObjectURL(f)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>link.download = 'mockingbird_data.csv'</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>link.click()</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>// console.log(csv)</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>},</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>},</span></p>
+<p class="p1"><span class="s1">})</span></p>
+</body>
+</html>
